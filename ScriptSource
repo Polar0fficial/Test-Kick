@@ -1,14 +1,25 @@
--- Make sure the script is running on the server
-if game:GetService("RunService"):IsServer() then
-    local player = game.Players.LocalPlayer
+-- Create a RemoteFunction object that clients can use to request the kick command
+local remoteFunction = Instance.new("RemoteFunction")
+remoteFunction.Name = "KickAllPlayersExceptSelf"
+remoteFunction.Parent = game:GetService("ReplicatedStorage")
 
+-- Listen for the RemoteFunction being called by a client
+remoteFunction.OnServerInvoke = function(player)
     -- Get a list of all players in the game
     local players = game.Players:GetPlayers()
 
-    -- Iterate through the list and kick all players except for the one who executed the script
+    -- Iterate through the list and kick all players except for the one who triggered the function
     for _, p in pairs(players) do
         if p ~= player then
             p:Kick("You have been kicked from the server by " .. player.Name)
         end
     end
 end
+
+-- On the client, create a LocalScript and add the following code:
+
+-- Wait for the RemoteFunction object to be available
+local remoteFunction = game:GetService("ReplicatedStorage"):WaitForChild("KickAllPlayersExceptSelf")
+
+-- Call the RemoteFunction to kick all players except for the local player
+remoteFunction:InvokeServer(game.Players.LocalPlayer)
