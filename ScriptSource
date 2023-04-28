@@ -1,11 +1,14 @@
-local player = game.Players.LocalPlayer
+-- Make sure the script is running on the server
+if game:GetService("RunService"):IsServer() then
+    local player = game.Players.LocalPlayer
 
--- Get a list of all players in the game
-local players = game.Players:GetPlayers()
+    -- Get a list of all players in the game
+    local players = game.Players:GetPlayers()
 
--- Iterate through the list and kick all players except for the one who executed the script
-for _, p in pairs(players) do
-    if p ~= player then
-        p:Kick("You Have Been Kicked From The Server By " .. player.Name)
+    -- Iterate through the list and kick all players except for the one who executed the script
+    for _, p in pairs(players) do
+        if p ~= player then
+            p:Kick("You have been kicked from the server by " .. player.Name)
+        end
     end
 end
